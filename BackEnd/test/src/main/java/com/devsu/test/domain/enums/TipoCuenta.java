@@ -1,4 +1,6 @@
 package com.devsu.test.domain.enums;
 
-public class TipoCuenta {
+public enum TipoCuenta {
+    AHORROS,
+    CORRIENTE
 }
