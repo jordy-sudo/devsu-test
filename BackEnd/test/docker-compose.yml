@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: devsu-postgres
+    environment:
+      POSTGRES_DB: devsu_db
+      POSTGRES_USER: devsu_user
+      POSTGRES_PASSWORD: devsu_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - devsu_pgdata:/var/lib/postgresql/data
+
+volumes:
+  devsu_pgdata:
