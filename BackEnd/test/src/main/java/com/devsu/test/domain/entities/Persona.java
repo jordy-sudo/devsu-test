@@ -29,7 +29,7 @@ public class Persona {
     @Column(nullable = false, length = 30)
     private String telefono;
 
-    // getters/setters (IntelliJ: Alt+Insert)
+    // getters/setters 
     public Long getId() { return id; }
     public String getNombre() { return nombre; }
     public void setNombre(String nombre) { this.nombre = nombre; }
