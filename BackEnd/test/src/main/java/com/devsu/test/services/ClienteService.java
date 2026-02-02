@@ -7,6 +7,7 @@ import com.devsu.test.domain.entities.Persona;
 import com.devsu.test.exceptions.BusinessException;
 import com.devsu.test.repositories.ClienteRepository;
 import com.devsu.test.repositories.PersonaRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,16 +16,18 @@ public class ClienteService {
 
     private final PersonaRepository personaRepository;
     private final ClienteRepository clienteRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public ClienteService(PersonaRepository personaRepository, ClienteRepository clienteRepository) {
+    public ClienteService(PersonaRepository personaRepository, ClienteRepository clienteRepository,  PasswordEncoder passwordEncoder) {
         this.personaRepository = personaRepository;
         this.clienteRepository = clienteRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Transactional
     public ClienteResponse createClienteFlujo1(ClienteCreateRequest req) {
 
-        // 1) Validación de identificacion única (a nivel persona)
+        // 1) Validación de identificacion única
         if (personaRepository.existsByIdentificacion(req.getIdentificacion())) {
             throw new BusinessException("Ya existe una persona con esa identificación");
         }
@@ -40,15 +43,15 @@ public class ClienteService {
 
         Persona savedPersona = personaRepository.save(persona);
 
-        // 3) Crear Cliente con el MISMO ID (PK compartida)
+        // 3) Crear Cliente
         Cliente cliente = new Cliente();
-        cliente.setPersona(savedPersona); // MapsId toma el id automáticamente
-        cliente.setContrasena(req.getContrasena());
+        cliente.setPersona(savedPersona);
+        cliente.setContrasena(passwordEncoder.encode(req.getContrasena()));
         cliente.setEstado(req.getEstado() != null ? req.getEstado() : true);
 
         Cliente savedCliente = clienteRepository.save(cliente);
 
-        // 4) Respuesta (no devuelvas contraseña)
+        // 4) Respuesta
         return new ClienteResponse(
                 savedCliente.getId(),
                 savedPersona.getNombre(),

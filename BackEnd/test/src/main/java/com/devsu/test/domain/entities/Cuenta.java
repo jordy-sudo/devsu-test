@@ -4,8 +4,6 @@ import com.devsu.test.domain.enums.TipoCuenta;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "cuenta")
@@ -23,24 +21,24 @@ public class Cuenta {
     private BigDecimal saldoInicial;
 
     @Column(nullable = false)
-    private Boolean estado;
+    private Boolean estado = true;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "cliente_id", nullable = false)
     private Cliente cliente;
 
-    @OneToMany(mappedBy = "cuenta", cascade = CascadeType.ALL, orphanRemoval = false)
-    private List<Movimiento> movimientos = new ArrayList<>();
-
     public String getNumeroCuenta() { return numeroCuenta; }
     public void setNumeroCuenta(String numeroCuenta) { this.numeroCuenta = numeroCuenta; }
+
     public TipoCuenta getTipoCuenta() { return tipoCuenta; }
     public void setTipoCuenta(TipoCuenta tipoCuenta) { this.tipoCuenta = tipoCuenta; }
+
     public BigDecimal getSaldoInicial() { return saldoInicial; }
     public void setSaldoInicial(BigDecimal saldoInicial) { this.saldoInicial = saldoInicial; }
+
     public Boolean getEstado() { return estado; }
     public void setEstado(Boolean estado) { this.estado = estado; }
+
     public Cliente getCliente() { return cliente; }
     public void setCliente(Cliente cliente) { this.cliente = cliente; }
-    public List<Movimiento> getMovimientos() { return movimientos; }
 }

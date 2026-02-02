@@ -22,24 +22,29 @@ public class Movimiento {
     private TipoMovimiento tipoMovimiento;
 
     @Column(nullable = false, precision = 15, scale = 2)
-    private BigDecimal valor;
+    private BigDecimal valor; // depósito positivo, retiro negativo
 
     @Column(nullable = false, precision = 15, scale = 2)
-    private BigDecimal saldo;
+    private BigDecimal saldo; // saldo disponible después del movimiento
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "numero_cuenta", nullable = false)
     private Cuenta cuenta;
 
     public Long getId() { return id; }
+
     public LocalDate getFecha() { return fecha; }
     public void setFecha(LocalDate fecha) { this.fecha = fecha; }
+
     public TipoMovimiento getTipoMovimiento() { return tipoMovimiento; }
     public void setTipoMovimiento(TipoMovimiento tipoMovimiento) { this.tipoMovimiento = tipoMovimiento; }
+
     public BigDecimal getValor() { return valor; }
     public void setValor(BigDecimal valor) { this.valor = valor; }
+
     public BigDecimal getSaldo() { return saldo; }
     public void setSaldo(BigDecimal saldo) { this.saldo = saldo; }
+
     public Cuenta getCuenta() { return cuenta; }
     public void setCuenta(Cuenta cuenta) { this.cuenta = cuenta; }
 }
