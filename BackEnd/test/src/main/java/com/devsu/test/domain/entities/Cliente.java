@@ -1,26 +1,34 @@
 package com.devsu.test.domain.entities;
 
 import jakarta.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "cliente")
-@PrimaryKeyJoinColumn(name = "cliente_id")
-public class Cliente extends Persona {
+public class Cliente {
 
-    @Column(name = "contrasena", nullable = false, length = 100)
+    @Id
+    @Column(name = "cliente_id")
+    private Long id;
+
+    @OneToOne(optional = false, fetch = FetchType.LAZY)
+    @MapsId
+    @JoinColumn(name = "cliente_id")
+    private Persona persona;
+
+    @Column(nullable = false, length = 100)
     private String contrasena;
 
     @Column(nullable = false)
-    private Boolean estado;
+    private Boolean estado = true;
 
-    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = false)
-    private List<Cuenta> cuentas = new ArrayList<>();
+    public Long getId() { return id; }
+
+    public Persona getPersona() { return persona; }
+    public void setPersona(Persona persona) { this.persona = persona; }
 
     public String getContrasena() { return contrasena; }
     public void setContrasena(String contrasena) { this.contrasena = contrasena; }
+
     public Boolean getEstado() { return estado; }
     public void setEstado(Boolean estado) { this.estado = estado; }
-    public List<Cuenta> getCuentas() { return cuentas; }
 }
