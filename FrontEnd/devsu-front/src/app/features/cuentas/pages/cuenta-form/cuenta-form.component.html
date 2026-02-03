@@ -1,0 +1,46 @@
+<section class="card">
+    <header class="card__header">
+      <h1 class="title">{{ isEdit ? 'Editar Cuenta' : 'Nueva Cuenta' }}</h1>
+      <button class="btn" type="button" (click)="volver()">Volver</button>
+    </header>
+  
+    <form class="form" [formGroup]="form" (ngSubmit)="guardar()">
+      <div class="grid">
+        <div class="field">
+          <label>Número Cuenta</label>
+          <input class="input" formControlName="numeroCuenta" />
+          @if (msg('numeroCuenta'); as m) { <div class="field-error">{{ m }}</div> }
+        </div>
+  
+        <div class="field">
+          <label>Tipo Cuenta</label>
+          <select class="input" formControlName="tipoCuenta">
+            <option value="">Seleccione</option>
+            <option value="Ahorros">Ahorros</option>
+            <option value="Corriente">Corriente</option>
+          </select>
+          @if (msg('tipoCuenta'); as m) { <div class="field-error">{{ m }}</div> }
+        </div>
+  
+        <div class="field">
+          <label>Saldo Inicial</label>
+          <input class="input" type="number" formControlName="saldoInicial" />
+          @if (msg('saldoInicial'); as m) { <div class="field-error">{{ m }}</div> }
+        </div>
+  
+        <div class="field">
+          <label>Estado</label>
+          <select class="input" formControlName="estado">
+            <option [ngValue]="true">Activo</option>
+            <option [ngValue]="false">Inactivo</option>
+          </select>
+          <small class="hint">Campo solo lectura (disabled por defecto).</small>
+        </div>
+      </div>
+  
+      <div class="footer">
+        <button class="btn btn--primary" type="submit">Guardar</button>
+      </div>
+    </form>
+  </section>
+  

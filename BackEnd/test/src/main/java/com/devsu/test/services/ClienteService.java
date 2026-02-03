@@ -21,28 +21,34 @@ public class ClienteService {
     private final ClienteRepository clienteRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public ClienteService(
-            PersonaRepository personaRepository,
-            ClienteRepository clienteRepository,
-            PasswordEncoder passwordEncoder
-    ) {
+    public ClienteService(PersonaRepository personaRepository,
+                          ClienteRepository clienteRepository,
+                          PasswordEncoder passwordEncoder) {
         this.personaRepository = personaRepository;
         this.clienteRepository = clienteRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
     /**
-     * 1) Persona YA existe (creada por /personas)
-     * 2) Se busca Persona por identificación única
-     * 3) Se crea Cliente asociado a esa Persona (PK compartida)
+     * - Si NO existe Persona por identificacion => crear Persona
+     * - Si ya existe => usarla
+     * - Luego crear Cliente (si no existe para esa persona)
      */
     @Transactional
     public ClienteResponse createClienteFlujo1(ClienteCreateRequest req) {
 
         Persona persona = personaRepository.findByIdentificacion(req.getIdentificacion())
-                .orElseThrow(() -> new BusinessException("Persona no existe con la identificación enviada"));
+                .orElseGet(() -> {
+                    Persona p = new Persona();
+                    p.setNombre(req.getNombre());
+                    p.setGenero(req.getGenero());
+                    p.setEdad(req.getEdad());
+                    p.setIdentificacion(req.getIdentificacion());
+                    p.setDireccion(req.getDireccion());
+                    p.setTelefono(req.getTelefono());
+                    return personaRepository.save(p);
+                });
 
-        // Evitar crear dos clientes para la misma persona
         if (clienteRepository.existsById(persona.getId())) {
             throw new BusinessException("Ya existe un cliente para esta persona");
         }
@@ -59,9 +65,7 @@ public class ClienteService {
 
     @Transactional(readOnly = true)
     public List<ClienteResponse> findAll() {
-        return clienteRepository.findAll().stream()
-                .map(this::mapToResponse)
-                .toList();
+        return clienteRepository.findAll().stream().map(this::mapToResponse).toList();
     }
 
     @Transactional(readOnly = true)
@@ -73,25 +77,18 @@ public class ClienteService {
 
     @Transactional
     public ClienteResponse update(Long id, ClienteUpdateRequest req) {
-
         Cliente cliente = clienteRepository.findById(id)
                 .orElseThrow(() -> new BusinessException("Cliente no existe"));
 
-        // actualiza estado
         cliente.setEstado(req.getEstado());
 
-        // si viene contraseña, actualizarla (hasheada)
         if (req.getContrasena() != null && !req.getContrasena().isBlank()) {
             cliente.setContrasena(passwordEncoder.encode(req.getContrasena()));
         }
 
-        Cliente saved = clienteRepository.save(cliente);
-        return mapToResponse(saved);
+        return mapToResponse(clienteRepository.save(cliente));
     }
 
-    /**
-     * Borrado lógico (buena práctica bancaria)
-     */
     @Transactional
     public void delete(Long id) {
         Cliente cliente = clienteRepository.findById(id)
@@ -101,17 +98,13 @@ public class ClienteService {
         clienteRepository.save(cliente);
     }
 
-    // ==========================
-    // Mapper privado
-    // ==========================
     private ClienteResponse mapToResponse(Cliente cliente) {
         Persona p = cliente.getPersona();
-
         return new ClienteResponse(
                 cliente.getId(),
                 p.getNombre(),
-                //p.getGenero(),
-                //p.getEdad(),
+                p.getGenero(),
+                p.getEdad(),
                 p.getIdentificacion(),
                 p.getDireccion(),
                 p.getTelefono(),

@@ -2,18 +2,18 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ClienteFacade } from '../../fecades/cliente.facade';
+import { CuentaFacade } from '../../fecades/cuenta.facade';
 
 @Component({
   standalone: true,
-  selector: 'app-cliente-list',
+  selector: 'app-cuenta-list',
   imports: [CommonModule, FormsModule],
-  templateUrl: './cliente-list.component.html',
-  styleUrls: ['./cliente-list.component.css'],
+  templateUrl: './cuenta-list.component.html',
+  styleUrls: ['./cuenta-list.component.css'],
 })
-export class ClienteListComponent implements OnInit {
+export class CuentaListComponent implements OnInit {
   private readonly router = inject(Router);
-  readonly facade = inject(ClienteFacade);
+  readonly facade = inject(CuentaFacade);
 
   search = '';
   readonly vm$ = this.facade.vm$;
@@ -23,15 +23,15 @@ export class ClienteListComponent implements OnInit {
   }
 
   nuevo() {
-    this.router.navigate(['/clientes/nuevo']);
+    this.router.navigate(['/cuentas/nuevo']);
   }
 
   editar(id: number) {
-    this.router.navigate(['/clientes/editar', id]);
+    this.router.navigate(['/cuentas/editar', id]);
   }
 
   eliminar(id: number) {
-    if (confirm('¿Seguro que deseas eliminar este cliente?')) {
+    if (confirm('¿Seguro que deseas eliminar esta cuenta?')) {
       this.facade.remove(id);
     }
   }

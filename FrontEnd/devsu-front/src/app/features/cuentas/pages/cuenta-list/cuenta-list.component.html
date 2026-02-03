@@ -1,0 +1,68 @@
+<section class="card">
+    <header class="card__header">
+      <h1 class="title">Cuentas</h1>
+  
+      <div class="actions">
+        <input
+          class="input"
+          placeholder="Buscar"
+          [(ngModel)]="search"
+          (ngModelChange)="facade.setSearch($event)"
+        />
+        <button class="btn btn--primary" type="button" (click)="nuevo()">Nuevo</button>
+      </div>
+    </header>
+  
+    @if (vm$ | async; as vm) {
+  
+      @if (vm.error; as err) {
+        <div class="alert alert--error">
+          {{ err }}
+          <button class="alert__close" type="button" (click)="facade.clearError()">×</button>
+        </div>
+      }
+  
+      @if (vm.loading) {
+        <div class="loading">Cargando...</div>
+      } @else {
+  
+        <div class="table-wrap">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Número Cuenta</th>
+                <th>Tipo</th>
+                <th>Saldo Inicial</th>
+                <th>Estado</th>
+                <th style="width: 160px">Acciones</th>
+              </tr>
+            </thead>
+  
+            <tbody>
+              @for (c of vm.data; track c.cuentaId) {
+                <tr>
+                  <td>{{ c.numeroCuenta }}</td>
+                  <td>{{ c.tipoCuenta }}</td>
+                  <td>{{ c.saldoInicial }}</td>
+                  <td>{{ c.estado ? 'Activo' : 'Inactivo' }}</td>
+                  <td class="row-actions">
+                    <button class="btn btn--ghost" type="button" (click)="editar(c.cuentaId)">Editar</button>
+                    <button class="btn btn--danger" type="button" (click)="eliminar(c.cuentaId)">Eliminar</button>
+                  </td>
+                </tr>
+              } @empty {
+                <tr>
+                  <td colspan="5" class="empty">Sin resultados</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+  
+      }
+  
+    } @else {
+      <div class="loading">Cargando...</div>
+    }
+  </section>
+  
