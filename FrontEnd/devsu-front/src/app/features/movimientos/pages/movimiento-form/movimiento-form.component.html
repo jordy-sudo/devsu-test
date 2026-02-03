@@ -1,0 +1,37 @@
+<section class="card">
+    <header class="card__header">
+      <h1 class="title">Nuevo Movimiento</h1>
+      <button class="btn" type="button" (click)="volver()">Volver</button>
+    </header>
+  
+    <form class="form" [formGroup]="form" (ngSubmit)="guardar()">
+      <div class="grid">
+        <div class="field">
+          <label>Cuenta ID</label>
+          <input class="input" type="number" formControlName="cuentaId" />
+          @if (msg('cuentaId'); as m) { <div class="field-error">{{ m }}</div> }
+        </div>
+  
+        <div class="field">
+          <label>Tipo Movimiento</label>
+          <select class="input" formControlName="tipoMovimiento">
+            <option value="">Seleccione</option>
+            <option value="CREDITO">Crédito</option>
+            <option value="DEBITO">Débito</option>
+          </select>
+          @if (msg('tipoMovimiento'); as m) { <div class="field-error">{{ m }}</div> }
+        </div>
+  
+        <div class="field">
+          <label>Valor</label>
+          <input class="input" type="number" formControlName="valor" />
+          @if (msg('valor'); as m) { <div class="field-error">{{ m }}</div> }
+        </div>
+      </div>
+  
+      <div class="footer">
+        <button class="btn btn--primary" type="submit">Guardar</button>
+      </div>
+    </form>
+  </section>
+  

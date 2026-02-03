@@ -1,0 +1,68 @@
+<section class="card">
+    <header class="card__header">
+      <h1 class="title">Movimientos</h1>
+  
+      <div class="actions">
+        <input
+          class="input"
+          placeholder="Buscar"
+          [(ngModel)]="search"
+          (ngModelChange)="facade.setSearch($event)"
+        />
+        <button class="btn btn--primary" type="button" (click)="nuevo()">Nuevo</button>
+      </div>
+    </header>
+  
+    @if (vm$ | async; as vm) {
+  
+      @if (vm.error; as err) {
+        <div class="alert alert--error">
+          {{ err }}
+          <button class="alert__close" type="button" (click)="facade.clearError()">×</button>
+        </div>
+      }
+  
+      @if (vm.loading) {
+        <div class="loading">Cargando...</div>
+      } @else {
+  
+        <div class="table-wrap">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Fecha</th>
+                <th>Tipo</th>
+                <th>Valor</th>
+                <th>Saldo</th>
+                <th>Cuenta</th>
+                <th style="width:120px">Acciones</th>
+              </tr>
+            </thead>
+  
+            <tbody>
+              @for (m of vm.data; track m.movimientoId) {
+                <tr>
+                  <td>{{ m.fecha | date:'short' }}</td>
+                  <td>{{ m.tipoMovimiento }}</td>
+                  <td>{{ m.valor }}</td>
+                  <td>{{ m.saldo }}</td>
+                  <td>{{ m.cuentaId }}</td>
+                  <td>
+                    <button class="btn btn--danger" type="button" (click)="eliminar(m.movimientoId)">
+                      Eliminar
+                    </button>
+                  </td>
+                </tr>
+              } @empty {
+                <tr>
+                  <td colspan="6" class="empty">Sin movimientos</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+  
+      }
+    }
+  </section>
+  
