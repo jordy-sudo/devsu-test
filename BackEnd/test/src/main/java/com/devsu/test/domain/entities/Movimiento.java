@@ -47,4 +47,11 @@ public class Movimiento {
 
     public Cuenta getCuenta() { return cuenta; }
     public void setCuenta(Cuenta cuenta) { this.cuenta = cuenta; }
+
+    @Column(nullable = false)
+    private Boolean estado = true;
+
+    public Boolean getEstado() { return estado; }
+    public void setEstado(Boolean estado) { this.estado = estado; }
+
 }

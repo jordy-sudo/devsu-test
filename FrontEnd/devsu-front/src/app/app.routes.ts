@@ -20,10 +20,10 @@ export const appRoutes: Routes = [
         path: 'movimientos',
         loadChildren: () => import('./features/movimientos/movimientos.routes').then(m => m.MOVIMIENTOS_ROUTES),
       },
-    //   {
-    //     path: 'reportes',
-    //     loadChildren: () => import('./features/reportes/reportes.routes').then(m => m.REPORTES_ROUTES),
-    //   },
+      {
+        path: 'reportes',
+        loadChildren: () => import('./features/reportes/reportes.routes').then(m => m.REPORTES_ROUTES),
+      },
     ],
   },
 

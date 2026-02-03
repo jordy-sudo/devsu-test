@@ -1,8 +1,9 @@
 package com.devsu.test.services;
 
 import com.devsu.test.domain.dto.request.MovimientoCreateRequest;
+import com.devsu.test.domain.dto.request.MovimientoUpdateRequest;
+import com.devsu.test.domain.dto.response.MovimientoDetailResponse;
 import com.devsu.test.domain.dto.response.MovimientoListadoResponse;
-import com.devsu.test.domain.dto.response.MovimientoResponse;
 import com.devsu.test.domain.entities.Cuenta;
 import com.devsu.test.domain.entities.Movimiento;
 import com.devsu.test.domain.enums.TipoMovimiento;
@@ -29,8 +30,11 @@ public class MovimientoService {
         this.movimientoRepository = movimientoRepository;
     }
 
+    // ==========================
+    // CREATE (POST /movimientos)
+    // ==========================
     @Transactional
-    public MovimientoResponse crear(MovimientoCreateRequest req) {
+    public MovimientoDetailResponse create(MovimientoCreateRequest req) {
 
         Cuenta cuenta = cuentaRepository.findById(req.getNumeroCuenta())
                 .orElseThrow(() -> new BusinessException("Cuenta no existe"));
@@ -39,101 +43,161 @@ public class MovimientoService {
             throw new BusinessException("Cuenta inactiva");
         }
 
-        // Fecha
+        if (!Boolean.TRUE.equals(cuenta.getCliente().getEstado())) {
+            throw new BusinessException("Cliente inactivo");
+        }
+
         LocalDate fecha = (req.getFecha() == null || req.getFecha().isBlank())
                 ? LocalDate.now()
                 : LocalDate.parse(req.getFecha());
 
-        // Tipo
-        TipoMovimiento tipo;
-        try {
-            tipo = TipoMovimiento.valueOf(req.getTipoMovimiento().trim().toUpperCase());
-        } catch (Exception e) {
-            throw new BusinessException("tipoMovimiento inválido. Use: DEPOSITO o RETIRO");
-        }
+        TipoMovimiento tipo = parseTipoMovimiento(req.getTipoMovimiento());
 
-        // Saldo actual = último saldo si hay movimientos, sino saldo_inicial
+        // saldo actual: último movimiento o saldo inicial
         BigDecimal saldoActual = movimientoRepository
                 .findTopByCuenta_NumeroCuentaOrderByIdDesc(cuenta.getNumeroCuenta())
+                .filter(Movimiento::getEstado) // solo si el último está activo
                 .map(Movimiento::getSaldo)
                 .orElse(cuenta.getSaldoInicial());
 
-        BigDecimal valor = req.getValor();
+        BigDecimal valorAbs = req.getValor().abs();
 
-        // Regla: crédito positivo / débito negativo
-        BigDecimal movimientoValor;
+        // regla: depósito positivo / retiro negativo
+        BigDecimal valor;
         if (tipo == TipoMovimiento.DEPOSITO) {
-            movimientoValor = valor.abs(); // positivo
+            valor = valorAbs;
         } else {
-            movimientoValor = valor.abs().negate(); // negativo
+            valor = valorAbs.negate();
         }
 
-        // Validación: saldo no disponible si retiro y saldoActual <= 0
-        if (tipo == TipoMovimiento.RETIRO && saldoActual.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new BusinessException("Saldo no disponible");
-        }
-
-        // Validación: saldo suficiente (si retiro)
+        // validación saldo
         if (tipo == TipoMovimiento.RETIRO) {
-            BigDecimal saldoLuego = saldoActual.add(movimientoValor); // movimientoValor es negativo
+            if (saldoActual.compareTo(BigDecimal.ZERO) <= 0) {
+                throw new BusinessException("Saldo no disponible");
+            }
+
+            BigDecimal saldoLuego = saldoActual.add(valor); // valor es negativo
             if (saldoLuego.compareTo(BigDecimal.ZERO) < 0) {
                 throw new BusinessException("Saldo no disponible");
             }
 
-            // Validación límite diario: suma de retiros del día + este retiro <= 1000
+            // validación cupo diario
             BigDecimal retirosHoy = movimientoRepository.sumRetirosDelDia(cuenta.getNumeroCuenta(), fecha);
-            BigDecimal nuevoAcumulado = retirosHoy.add(valor.abs());
-
+            BigDecimal nuevoAcumulado = retirosHoy.add(valorAbs);
             if (nuevoAcumulado.compareTo(LIMITE_DIARIO_RETIRO) > 0) {
                 throw new BusinessException("Cupo diario Excedido");
             }
         }
 
-        // Calcular saldo final
-        BigDecimal saldoFinal = saldoActual.add(movimientoValor);
+        BigDecimal saldoFinal = saldoActual.add(valor);
 
-        // Guardar movimiento
-        Movimiento mov = new Movimiento();
-        mov.setCuenta(cuenta);
-        mov.setFecha(fecha);
-        mov.setTipoMovimiento(tipo);
-        mov.setValor(movimientoValor);
-        mov.setSaldo(saldoFinal);
+        Movimiento m = new Movimiento();
+        m.setCuenta(cuenta);
+        m.setFecha(fecha);
+        m.setTipoMovimiento(tipo);
+        m.setValor(valor);
+        m.setSaldo(saldoFinal);
+        m.setEstado(true);
 
-        Movimiento saved = movimientoRepository.save(mov);
+        Movimiento saved = movimientoRepository.save(m);
 
-        String clienteNombre = cuenta.getCliente().getPersona().getNombre();
-
-        return new MovimientoResponse(
+        return new MovimientoDetailResponse(
                 saved.getId(),
                 saved.getFecha().toString(),
-                clienteNombre,
-                cuenta.getNumeroCuenta(),
-                cuenta.getTipoCuenta().name(),
-                cuenta.getSaldoInicial(),
-                cuenta.getEstado(),
+                saved.getTipoMovimiento().name(),
                 saved.getValor(),
-                saved.getSaldo()
+                saved.getSaldo(),
+                saved.getEstado(),
+                saved.getCuenta().getNumeroCuenta()
         );
     }
 
-    public List<MovimientoListadoResponse> listarPorClienteYRango(Long clienteId, LocalDate desde, LocalDate hasta) {
+    // ==========================
+    // READ ONE (GET /movimientos/{id})
+    // ==========================
+    @Transactional(readOnly = true)
+    public MovimientoDetailResponse findById(Long id) {
+        Movimiento m = movimientoRepository.findById(id)
+                .orElseThrow(() -> new BusinessException("Movimiento no existe"));
 
+        return new MovimientoDetailResponse(
+                m.getId(),
+                m.getFecha().toString(),
+                m.getTipoMovimiento().name(),
+                m.getValor(),
+                m.getSaldo(),
+                m.getEstado(),
+                m.getCuenta().getNumeroCuenta()
+        );
+    }
+
+    // ==========================
+    // READ LIST (GET /movimientos?clienteId&desde&hasta&q)
+    // ==========================
+    @Transactional(readOnly = true)
+    public List<MovimientoListadoResponse> listarPorClienteYRango(Long clienteId, LocalDate desde, LocalDate hasta, String q) {
         if (desde.isAfter(hasta)) {
             throw new BusinessException("Rango de fechas inválido: 'desde' no puede ser mayor que 'hasta'");
         }
 
-        List<Movimiento> movimientos = movimientoRepository.findByClienteAndRangoFechas(clienteId, desde, hasta);
+        return movimientoRepository.findByClienteRangoYQuery(clienteId, desde, hasta, q)
+                .stream()
+                .map(m -> new MovimientoListadoResponse(
+                        m.getFecha().toString(),
+                        m.getCuenta().getCliente().getPersona().getNombre(),
+                        m.getCuenta().getNumeroCuenta(),
+                        m.getCuenta().getTipoCuenta().name(),
+                        m.getCuenta().getSaldoInicial(),
+                        m.getCuenta().getEstado(),
+                        m.getValor(),
+                        m.getSaldo()
+                ))
+                .toList();
+    }
 
-        return movimientos.stream().map(m -> new MovimientoListadoResponse(
-                m.getFecha().toString(),
-                m.getCuenta().getCliente().getPersona().getNombre(),
-                m.getCuenta().getNumeroCuenta(),
-                m.getCuenta().getTipoCuenta().name(),
-                m.getCuenta().getSaldoInicial(),
-                m.getCuenta().getEstado(),
-                m.getValor(),
-                m.getSaldo()
-        )).toList();
+    // ==========================
+    // PATCH (anular) /movimientos/{id}
+    // ==========================
+    @Transactional
+    public MovimientoDetailResponse patchEstado(Long id, MovimientoUpdateRequest req) {
+        Movimiento m = movimientoRepository.findById(id)
+                .orElseThrow(() -> new BusinessException("Movimiento no existe"));
+
+        // En banca: no se re-activa ni se edita, solo se anula
+        if (Boolean.FALSE.equals(req.getEstado()) && Boolean.TRUE.equals(m.getEstado())) {
+            m.setEstado(false);
+            Movimiento saved = movimientoRepository.save(m);
+
+            return new MovimientoDetailResponse(
+                    saved.getId(),
+                    saved.getFecha().toString(),
+                    saved.getTipoMovimiento().name(),
+                    saved.getValor(),
+                    saved.getSaldo(),
+                    saved.getEstado(),
+                    saved.getCuenta().getNumeroCuenta()
+            );
+        }
+
+        throw new BusinessException("Operación no permitida. Solo se permite anular (estado=false).");
+    }
+
+    // ==========================
+    // DELETE lógico /movimientos/{id}
+    // ==========================
+    @Transactional
+    public void delete(Long id) {
+        Movimiento m = movimientoRepository.findById(id)
+                .orElseThrow(() -> new BusinessException("Movimiento no existe"));
+        m.setEstado(false);
+        movimientoRepository.save(m);
+    }
+
+    private TipoMovimiento parseTipoMovimiento(String raw) {
+        try {
+            return TipoMovimiento.valueOf(raw.trim().toUpperCase());
+        } catch (Exception e) {
+            throw new BusinessException("tipoMovimiento inválido. Use: DEPOSITO o RETIRO");
+        }
     }
 }

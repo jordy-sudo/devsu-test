@@ -1,0 +1,109 @@
+<section class="card">
+    <header class="card__header">
+      <h1 class="title">Reportes</h1>
+    </header>
+  
+    <form class="form" [formGroup]="form" (ngSubmit)="generar()">
+      <div class="grid">
+        <div class="field">
+          <label>Cliente</label>
+          <select class="input" formControlName="clienteId">
+            <option [ngValue]="null">Seleccione</option>
+            @for (c of clientes; track c.clienteId) {
+              <option [ngValue]="c.clienteId">{{ c.nombre }} ({{ c.identificacion }})</option>
+            }
+          </select>
+          @if (msg('clienteId'); as m) { <div class="field-error">{{ m }}</div> }
+        </div>
+  
+        <div class="field">
+          <label>Fecha inicio</label>
+          <input class="input" type="date" formControlName="fechaInicio" />
+          @if (msg('fechaInicio'); as m) { <div class="field-error">{{ m }}</div> }
+        </div>
+  
+        <div class="field">
+          <label>Fecha fin</label>
+          <input class="input" type="date" formControlName="fechaFin" />
+          @if (msg('fechaFin'); as m) { <div class="field-error">{{ m }}</div> }
+        </div>
+  
+        <div class="field field--actions">
+          <button class="btn btn--primary" type="submit">Generar</button>
+        </div>
+      </div>
+    </form>
+  
+    @if (vm$ | async; as vm) {
+  
+      @if (vm.error; as err) {
+        <div class="alert alert--error">
+          {{ err }}
+          <button class="alert__close" type="button" (click)="facade.clearError()">×</button>
+        </div>
+      }
+  
+      @if (vm.loading) {
+        <div class="loading">Generando reporte...</div>
+      }
+  
+      @if (vm.data; as r) {
+        <div class="report">
+          <div class="report__head">
+            <div>
+              <div class="report__title">Estado de cuenta</div>
+              <div class="report__sub">
+                Cliente: <strong>{{ r.cliente }}</strong> —
+                {{ r.fechaInicio }} a {{ r.fechaFin }}
+              </div>
+            </div>
+  
+            <button class="btn btn--ghost" type="button" (click)="descargarPdf(r.pdfBase64)">
+              Descargar PDF
+            </button>
+          </div>
+  
+          <div class="kpis">
+            <div class="kpi">
+              <div class="kpi__label">Total Créditos</div>
+              <div class="kpi__value">{{ r.totalCreditos }}</div>
+            </div>
+            <div class="kpi">
+              <div class="kpi__label">Total Débitos</div>
+              <div class="kpi__value">{{ r.totalDebitos }}</div>
+            </div>
+          </div>
+  
+          <div class="table-wrap">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Número Cuenta</th>
+                  <th>Tipo</th>
+                  <th>Saldo</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (cta of r.cuentas; track cta.numeroCuenta) {
+                  <tr>
+                    <td>{{ cta.numeroCuenta }}</td>
+                    <td>{{ cta.tipo }}</td>
+                    <td>{{ cta.saldo }}</td>
+                  </tr>
+                } @empty {
+                  <tr>
+                    <td colspan="3" class="empty">Sin cuentas asociadas</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+  
+          <div class="note">
+            El PDF se genera desde base64 según el enunciado.
+          </div>
+        </div>
+      }
+    }
+  </section>
+  
