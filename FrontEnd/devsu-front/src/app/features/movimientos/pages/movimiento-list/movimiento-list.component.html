@@ -1,31 +1,78 @@
 <section class="card">
-    <header class="card__header">
-      <h1 class="title">Movimientos</h1>
-  
-      <div class="actions">
-        <input
-          class="input"
-          placeholder="Buscar"
-          [(ngModel)]="search"
-          (ngModelChange)="facade.setSearch($event)"
-        />
-        <button class="btn btn--primary" type="button" (click)="nuevo()">Nuevo</button>
+  <header class="card__header">
+    <h1 class="title">Movimientos</h1>
+
+    <button class="btn btn--primary" type="button" (click)="nuevo()">
+      Nuevo
+    </button>
+  </header>
+
+  <form class="form" [formGroup]="form" (ngSubmit)="buscar()">
+    <div class="grid">
+      <div class="field">
+        <label>Cliente</label>
+        <select class="input" formControlName="clienteId">
+          <option [ngValue]="null">Seleccione</option>
+          @for (c of clientes; track c.clienteId) {
+            <option [ngValue]="c.clienteId">
+              {{ c.nombre }} ({{ c.identificacion }})
+            </option>
+          }
+        </select>
+        @if (msg('clienteId'); as m) { <div class="field-error">{{ m }}</div> }
       </div>
-    </header>
-  
-    @if (vm$ | async; as vm) {
-  
-      @if (vm.error; as err) {
-        <div class="alert alert--error">
-          {{ err }}
-          <button class="alert__close" type="button" (click)="facade.clearError()">×</button>
-        </div>
-      }
-  
+
+      <div class="field">
+        <label>Desde</label>
+        <input class="input" type="date" formControlName="desde" />
+        @if (msg('desde'); as m) { <div class="field-error">{{ m }}</div> }
+      </div>
+
+      <div class="field">
+        <label>Hasta</label>
+        <input class="input" type="date" formControlName="hasta" />
+        @if (msg('hasta'); as m) { <div class="field-error">{{ m }}</div> }
+      </div>
+
+      <div class="field">
+        <label>Búsqueda (opcional)</label>
+        <input class="input" placeholder="Ej: retiro, deposito..." formControlName="q" />
+      </div>
+
+      <div class="field field--actions">
+        <button class="btn btn--primary" type="submit">Buscar</button>
+      </div>
+    </div>
+  </form>
+
+  <div class="searchbar">
+    <!-- <input
+      class="input"
+      placeholder="Buscar en resultados..."
+      [ngModel]="search"
+      (ngModelChange)="onSearchLocal($event)"
+    /> -->
+  </div>
+
+  @if (vm$ | async; as vm) {
+
+    @if (vm.error; as err) {
+      <div class="alert alert--error">
+        {{ err }}
+        <button class="alert__close" type="button" (click)="facade.clearError()">×</button>
+      </div>
+    }
+
+    @if (!vm.searched) {
+      <div class="hint">
+        Seleccione un cliente y un rango de fechas, luego presione <strong>Buscar</strong>.
+      </div>
+    } @else {
+
       @if (vm.loading) {
         <div class="loading">Cargando...</div>
       } @else {
-  
+
         <div class="table-wrap">
           <table class="table">
             <thead>
@@ -38,31 +85,31 @@
                 <th style="width:120px">Acciones</th>
               </tr>
             </thead>
-  
+
             <tbody>
-              @for (m of vm.data; track m.movimientoId) {
+              @for (m of vm.data; track m.cuentaId) {
                 <tr>
-                  <td>{{ m.fecha | date:'short' }}</td>
+                  <td>{{ m.fecha }}</td>
                   <td>{{ m.tipoMovimiento }}</td>
                   <td>{{ m.valor }}</td>
                   <td>{{ m.saldo }}</td>
                   <td>{{ m.cuentaId }}</td>
                   <td>
-                    <button class="btn btn--danger" type="button" (click)="eliminar(m.movimientoId)">
+                    <button class="btn btn--danger" type="button" (click)="eliminar(m.cuentaId)">
                       Eliminar
                     </button>
                   </td>
                 </tr>
               } @empty {
                 <tr>
-                  <td colspan="6" class="empty">Sin movimientos</td>
+                  <td colspan="6" class="empty">Sin movimientos en el rango</td>
                 </tr>
               }
             </tbody>
           </table>
         </div>
-  
+
       }
     }
-  </section>
-  
+  }
+</section>

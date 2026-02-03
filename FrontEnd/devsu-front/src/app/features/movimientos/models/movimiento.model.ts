@@ -9,3 +9,8 @@ export interface Movimiento {
   
   export type MovimientoCreate = Omit<Movimiento, 'movimientoId' | 'saldo'>;
   
+  export interface MovimientosQuery {
+    desde: string;     // yyyy-mm-dd
+    hasta: string;     // yyyy-mm-dd
+    clienteId: number; // requerido en tu caso
+  }

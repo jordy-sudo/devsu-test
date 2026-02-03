@@ -12,8 +12,8 @@ export class ReporteApiRepository implements ReporteRepository {
   estadoCuenta(query: ReporteQuery): Observable<ReporteEstadoCuenta> {
     const params = new HttpParams()
       .set('clienteId', String(query.clienteId))
-      .set('fechaInicio', query.fechaInicio)
-      .set('fechaFin', query.fechaFin);
+      .set('desde', query.desde)
+      .set('hasta', query.hasta);
 
     return this.http.get<ReporteEstadoCuenta>(API.reportes(), { params });
   }

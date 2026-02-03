@@ -18,14 +18,14 @@
   
         <div class="field">
           <label>Fecha inicio</label>
-          <input class="input" type="date" formControlName="fechaInicio" />
-          @if (msg('fechaInicio'); as m) { <div class="field-error">{{ m }}</div> }
+          <input class="input" type="date" formControlName="desde" />
+          @if (msg('desde'); as m) { <div class="field-error">{{ m }}</div> }
         </div>
   
         <div class="field">
           <label>Fecha fin</label>
-          <input class="input" type="date" formControlName="fechaFin" />
-          @if (msg('fechaFin'); as m) { <div class="field-error">{{ m }}</div> }
+          <input class="input" type="date" formControlName="hasta" />
+          @if (msg('hasta'); as m) { <div class="field-error">{{ m }}</div> }
         </div>
   
         <div class="field field--actions">
@@ -53,14 +53,17 @@
             <div>
               <div class="report__title">Estado de cuenta</div>
               <div class="report__sub">
-                Cliente: <strong>{{ r.cliente }}</strong> —
-                {{ r.fechaInicio }} a {{ r.fechaFin }}
+                Cliente: <strong>{{ r.cliente }}</strong>
+                — {{ r.desde }} a {{ r.hasta }}
+                <span *ngIf="r.identificacion"> — CI: {{ r.identificacion }}</span>
               </div>
             </div>
   
-            <button class="btn btn--ghost" type="button" (click)="descargarPdf(r.pdfBase64)">
-              Descargar PDF
-            </button>
+            @if (r.pdfBase64) {
+              <button class="btn btn--ghost" type="button" (click)="descargarPdf(r.pdfBase64)">
+                Descargar PDF
+              </button>
+            }
           </div>
   
           <div class="kpis">
@@ -78,30 +81,62 @@
             <table class="table">
               <thead>
                 <tr>
-                  <th>Número Cuenta</th>
+                  <th>Número</th>
                   <th>Tipo</th>
-                  <th>Saldo</th>
+                  <th>Saldo Inicial</th>
+                  <th>Saldo Disponible</th>
+                  <th>Estado</th>
                 </tr>
               </thead>
               <tbody>
                 @for (cta of r.cuentas; track cta.numeroCuenta) {
                   <tr>
                     <td>{{ cta.numeroCuenta }}</td>
-                    <td>{{ cta.tipo }}</td>
-                    <td>{{ cta.saldo }}</td>
+                    <td>{{ cta.tipoCuenta }}</td>
+                    <td>{{ cta.saldoInicial }}</td>
+                    <td>{{ cta.saldoDisponible }}</td>
+                    <td>{{ cta.estado }}</td>
                   </tr>
                 } @empty {
                   <tr>
-                    <td colspan="3" class="empty">Sin cuentas asociadas</td>
+                    <td colspan="5" class="empty">Sin cuentas asociadas</td>
                   </tr>
                 }
               </tbody>
             </table>
           </div>
   
-          <div class="note">
-            El PDF se genera desde base64 según el enunciado.
+          <div class="table-wrap" style="margin-top: 16px;">
+            <div class="report__title" style="margin-bottom: 8px;">Movimientos</div>
+  
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Fecha</th>
+                  <th>Cuenta</th>
+                  <th>Tipo</th>
+                  <th>Movimiento</th>
+                  <th>Saldo</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (m of r.movimientos; track m.id) {
+                  <tr>
+                    <td>{{ m.fecha }}</td>
+                    <td>{{ m.numeroCuenta }}</td>
+                    <td>{{ m.tipoMovimiento }}</td>
+                    <td>{{ m.valor }}</td>
+                    <td>{{ m.saldo }}</td>
+                  </tr>
+                } @empty {
+                  <tr>
+                    <td colspan="5" class="empty">Sin movimientos en el rango</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
           </div>
+  
         </div>
       }
     }

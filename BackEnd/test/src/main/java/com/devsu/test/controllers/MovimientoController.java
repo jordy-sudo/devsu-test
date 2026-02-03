@@ -36,7 +36,7 @@ public class MovimientoController {
         return movimientoService.findById(id);
     }
 
-    // READ LIST + búsqueda rápida (q)
+    // READ LIST
     @GetMapping
     public List<MovimientoListadoResponse> listar(
             @RequestParam Long clienteId,
