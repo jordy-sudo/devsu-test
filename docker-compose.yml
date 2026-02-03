@@ -1,0 +1,65 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: devsu-postgres
+    environment:
+      POSTGRES_DB: devsu_db
+      POSTGRES_USER: devsu_user
+      POSTGRES_PASSWORD: devsu_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - devsu_pgdata:/var/lib/postgresql/data
+    networks:
+      - devsu_net
+
+  backend:
+    build:
+      context: ./BackEnd/test
+      dockerfile: ../../docker/Dockerfile.backend.dev
+    container_name: devsu-backend
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/devsu_db
+      SPRING_DATASOURCE_USERNAME: devsu_user
+      SPRING_DATASOURCE_PASSWORD: devsu_pass
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    depends_on:
+      - postgres
+    volumes:
+      - ./BackEnd/test:/app
+      - gradle_cache:/home/gradle/.gradle
+    working_dir: /app
+    command: bash -lc "chmod +x ./gradlew && ./gradlew bootRun"
+    networks:
+      - devsu_net
+
+  front:
+    build:
+      context: ./FrontEnd/devsu-front
+      dockerfile: ../../docker/Dockerfile.front.dev
+    container_name: devsu-front
+    ports:
+      - "4200:4200"
+    volumes:
+      - ./FrontEnd/devsu-front:/app
+      - node_modules_cache:/app/node_modules
+    working_dir: /app
+    command: npm run start -- --host 0.0.0.0 --poll 2000
+    depends_on:
+      - backend
+    networks:
+      - devsu_net
+
+volumes:
+  devsu_pgdata:
+  gradle_cache:
+  node_modules_cache:
+
+networks:
+  devsu_net:
+    driver: bridge

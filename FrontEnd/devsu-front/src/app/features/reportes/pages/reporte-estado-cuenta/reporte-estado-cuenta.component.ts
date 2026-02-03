@@ -28,7 +28,6 @@ export class ReporteEstadoCuentaComponent implements OnInit {
   clientes: Cliente[] = [];
   readonly vm$ = this.facade.vm$;
 
-  // ✅ los nombres del form DEBEN coincidir con el HTML
   form = this.fb.group({
     clienteId: [null as number | null, [Validators.required]],
     desde: ['', [Validators.required]], // yyyy-mm-dd
@@ -41,7 +40,6 @@ export class ReporteEstadoCuentaComponent implements OnInit {
       error: (err) => console.error('Error cargando clientes', err),
     });
 
-    // ✅ fecha por defecto (local, sin UTC)
     const today = yyyyMmDdLocal(new Date());
     this.form.patchValue({ desde: today, hasta: today });
   }

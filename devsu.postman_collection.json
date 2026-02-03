@@ -1,0 +1,562 @@
+{
+  "info": {
+    "_postman_id": "16961fa1-ae60-434e-bae1-712e4c026291",
+    "name": "devsu",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "13128089",
+    "_collection_link": "https://go.postman.co/collection/13128089-16961fa1-ae60-434e-bae1-712e4c026291?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Clientes",
+      "item": [
+        {
+          "name": "Crear Cliente",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"nombre\": \"Jose Lema\",\r\n  \"genero\": \"M\",\r\n  \"edad\": 30,\r\n  \"identificacion\": \"1234567890\",\r\n  \"direccion\": \"Otavalo sn y principal\",\r\n  \"telefono\": \"098254785\",\r\n  \"contrasena\": \"1234\",\r\n  \"estado\": true\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8080/clientes",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "clientes"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Crear Cliente",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"nombre\": \"Jose Lema\",\r\n  \"genero\": \"M\",\r\n  \"edad\": 30,\r\n  \"identificacion\": \"1234567890\",\r\n  \"direccion\": \"Otavalo sn y principal\",\r\n  \"telefono\": \"098254785\",\r\n  \"contrasena\": \"1234\",\r\n  \"estado\": true\r\n}\r\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "localhost:8080/clientes",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "clientes"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Date",
+                  "value": "Mon, 02 Feb 2026 20:27:04 GMT"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=60"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"clienteId\": 1,\n    \"nombre\": \"Jose Lema\",\n    \"identificacion\": \"1234567890\",\n    \"estado\": true\n}"
+            }
+          ]
+        },
+        {
+          "name": "Listar Clientes",
+          "request": {
+            "method": "GET",
+            "header": []
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Cuentas",
+      "item": [
+        {
+          "name": "Crear Cuenta",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"numeroCuenta\": \"225487\",\r\n  \"tipoCuenta\": \"CORRIENTE\",\r\n  \"saldoInicial\": 100.00,\r\n  \"clienteId\": 1,\r\n  \"estado\": true\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8080/cuentas",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "cuentas"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Crear Cuenta",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"numeroCuenta\": \"225487\",\r\n  \"tipoCuenta\": \"CORRIENTE\",\r\n  \"saldoInicial\": 100.00,\r\n  \"clienteId\": 3,\r\n  \"estado\": true\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "localhost:8080/cuentas",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "cuentas"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Date",
+                  "value": "Mon, 02 Feb 2026 20:44:25 GMT"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=60"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"numeroCuenta\": \"225487\",\n    \"tipoCuenta\": \"CORRIENTE\",\n    \"saldoInicial\": 100,\n    \"estado\": true,\n    \"clienteId\": 3\n}"
+            }
+          ]
+        },
+        {
+          "name": "Listar Cuentas",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"numeroCuenta\": \"225487\",\r\n  \"tipoCuenta\": \"CORRIENTE\",\r\n  \"saldoInicial\": 100.00,\r\n  \"clienteId\": 1,\r\n  \"estado\": true\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8080/cuentas",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "cuentas"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Crear Cuenta",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"numeroCuenta\": \"225487\",\r\n  \"tipoCuenta\": \"CORRIENTE\",\r\n  \"saldoInicial\": 100.00,\r\n  \"clienteId\": 3,\r\n  \"estado\": true\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "localhost:8080/cuentas",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "cuentas"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Date",
+                  "value": "Mon, 02 Feb 2026 20:44:25 GMT"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=60"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"numeroCuenta\": \"225487\",\n    \"tipoCuenta\": \"CORRIENTE\",\n    \"saldoInicial\": 100,\n    \"estado\": true,\n    \"clienteId\": 3\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Movimientos",
+      "item": [
+        {
+          "name": "Crear Movimiento",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"numeroCuenta\": \"225487\",\r\n  \"tipoMovimiento\": \"DEPOSITO\",\r\n  \"valor\": 600,\r\n  \"fecha\": \"2022-02-10\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8080/movimientos",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "movimientos"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Crear Movimiento",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"numeroCuenta\": \"225487\",\r\n  \"tipoMovimiento\": \"DEPOSITO\",\r\n  \"valor\": 600,\r\n  \"fecha\": \"2022-02-10\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "localhost:8080/movimientos",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "movimientos"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Date",
+                  "value": "Mon, 02 Feb 2026 21:16:36 GMT"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=60"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"id\": 1,\n    \"fecha\": \"2022-02-10\",\n    \"cliente\": \"Jose Lema\",\n    \"numeroCuenta\": \"225487\",\n    \"tipoCuenta\": \"CORRIENTE\",\n    \"saldoInicial\": 100,\n    \"estadoCuenta\": true,\n    \"movimiento\": 600,\n    \"saldoDisponible\": 700\n}"
+            }
+          ]
+        },
+        {
+          "name": "Listar Movimientos",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"numeroCuenta\": \"225487\",\r\n  \"tipoMovimiento\": \"DEPOSITO\",\r\n  \"valor\": 600,\r\n  \"fecha\": \"2022-02-10\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8080/movimientos?desde=2022-02-01&hasta=2022-02-28",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "movimientos"
+              ],
+              "query": [
+                {
+                  "key": "desde",
+                  "value": "2022-02-01"
+                },
+                {
+                  "key": "hasta",
+                  "value": "2022-02-28"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Crear Movimiento",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"numeroCuenta\": \"225487\",\r\n  \"tipoMovimiento\": \"DEPOSITO\",\r\n  \"valor\": 600,\r\n  \"fecha\": \"2022-02-10\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "localhost:8080/movimientos",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "movimientos"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Date",
+                  "value": "Mon, 02 Feb 2026 21:16:36 GMT"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=60"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"id\": 1,\n    \"fecha\": \"2022-02-10\",\n    \"cliente\": \"Jose Lema\",\n    \"numeroCuenta\": \"225487\",\n    \"tipoCuenta\": \"CORRIENTE\",\n    \"saldoInicial\": 100,\n    \"estadoCuenta\": true,\n    \"movimiento\": 600,\n    \"saldoDisponible\": 700\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Reportes",
+      "item": [
+        {
+          "name": "Reporte",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/reportes?clienteId=1&desde=2022-02-01&hasta=2022-02-28",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "reportes"
+              ],
+              "query": [
+                {
+                  "key": "clienteId",
+                  "value": "1"
+                },
+                {
+                  "key": "desde",
+                  "value": "2022-02-01"
+                },
+                {
+                  "key": "hasta",
+                  "value": "2022-02-28"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Reporte",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/reportes?clienteId=1&desde=2022-02-01&hasta=2022-02-28",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "reportes"
+                  ],
+                  "query": [
+                    {
+                      "key": "clienteId",
+                      "value": "1"
+                    },
+                    {
+                      "key": "desde",
+                      "value": "2022-02-01"
+                    },
+                    {
+                      "key": "hasta",
+                      "value": "2022-02-28"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Vary",
+                  "value": "Origin"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Access-Control-Request-Method"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Access-Control-Request-Headers"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Date",
+                  "value": "Tue, 03 Feb 2026 17:42:24 GMT"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=60"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"cliente\": \"Jose Lema\",\n    \"identificacion\": \"1234567890\",\n    \"desde\": \"2022-02-01\",\n    \"hasta\": \"2022-02-28\",\n    \"cuentas\": [\n        {\n            \"numeroCuenta\": \"225487\",\n            \"tipoCuenta\": \"CORRIENTE\",\n            \"saldoInicial\": 100,\n            \"saldoDisponible\": 100,\n            \"estado\": true\n        }\n    ],\n    \"totalCreditos\": 0,\n    \"totalDebitos\": 0,\n    \"movimientos\": [],\n    \"pdfBase64\": \"JVBERi0xLjUKJeLjz9MKMyAwIG9iago8PC9GaWx0ZXIvRmxhdGVEZWNvZGUvTGVuZ3RoIDU0OD4+c3RyZWFtCniclZXBcpswEIbvPMUe3UNUSawE+BjH6TjTphOHFyBGadXBkIDTPnPOvfVUSVCnRlLTzJgZm/9bafdfrfyYnJdJKiGnEso6oXDGmf3y/pIBQyjvk8V6OFR1B7WC1ZNqD9W78pvh6IQzMeIcGHX4qtGGUku46gYFH9U+GLDY1IbS93pX7fTPdgmMpyhklhc0iG+r9ku3BE45P6Pmw6A6/uB5NCXuUoKZnh8rHPWxruGUQpzh/71c2R2qRg3GsQZ6m/crjjkeVv1zrQ/dsISwAyN18Xz3D+gNSX7qvuu97VQ3qzt15LpMbpJH93C4Mu8/JJQI+GHPiswKkzoSCZxDr5LbSWJISVzlKAiPqikWJI+qKJBgPNZsKtNJYjKQUkSdUoqoU0oRdUrJU2/sQDGwfjJAs3puOrMfnR/bff1rr3p3JozJf8EMpc3V40v9EKC5YCS0+m3VmGHdtHqnq8YPS4WwRUXCLvTw0LX6rlF+JEpqC/Yix+shsJP1boKPp5JzgXkWqp27Ps351eftdrO+LtcBAzBzzZuHMEoJpaHKGQmlFOPNbeQaPOfL/umPO5H5EFxChiQze57OB6P2ZVTOBcE0KnPjv7mRY3KaIsnjeyMtiMjico6EFwF5fpyFeU77f6l2X6tAR5l0xXr8y5/ILKBgrnwvIHL+pXR2ePhrA2BuBOuTFxc7x8iEc84LeLlBA0EFdX6Gs7P8nEwdufAm8DcONrCRCmVuZHN0cmVhbQplbmRvYmoKNSAwIG9iago8PC9Db250ZW50cyAzIDAgUi9UeXBlL1BhZ2UvUmVzb3VyY2VzPDwvRm9udDw8L0YxIDEgMCBSL0YyIDIgMCBSPj4+Pi9QYXJlbnQgNCAwIFIvTWVkaWFCb3hbMCAwIDU5NSA4NDJdPj4KZW5kb2JqCjEgMCBvYmoKPDwvU3VidHlwZS9UeXBlMS9UeXBlL0ZvbnQvQmFzZUZvbnQvSGVsdmV0aWNhLUJvbGQvRW5jb2RpbmcvV2luQW5zaUVuY29kaW5nPj4KZW5kb2JqCjIgMCBvYmoKPDwvU3VidHlwZS9UeXBlMS9UeXBlL0ZvbnQvQmFzZUZvbnQvSGVsdmV0aWNhL0VuY29kaW5nL1dpbkFuc2lFbmNvZGluZz4+CmVuZG9iago0IDAgb2JqCjw8L0tpZHNbNSAwIFJdL1R5cGUvUGFnZXMvQ291bnQgMT4+CmVuZG9iago2IDAgb2JqCjw8L1R5cGUvQ2F0YWxvZy9QYWdlcyA0IDAgUj4+CmVuZG9iago3IDAgb2JqCjw8L0NyZWF0aW9uRGF0ZShEOjIwMjYwMjAzMTI0MjI0LTA1JzAwJykvUHJvZHVjZXIoT3BlblBERiAxLjMuMzkpPj4KZW5kb2JqCnhyZWYKMCA4CjAwMDAwMDAwMDAgNjU1MzUgZiAKMDAwMDAwMDc1MSAwMDAwMCBuIAowMDAwMDAwODQ0IDAwMDAwIG4gCjAwMDAwMDAwMTUgMDAwMDAgbiAKMDAwMDAwMDkzMiAwMDAwMCBuIAowMDAwMDAwNjMwIDAwMDAwIG4gCjAwMDAwMDA5ODMgMDAwMDAgbiAKMDAwMDAwMTAyOCAwMDAwMCBuIAp0cmFpbGVyCjw8L0luZm8gNyAwIFIvSUQgWzwwNDAzZmNkMGRmMThjYjU3ZDM4ZTkwZTNiY2ZmNzcyZD48MDQwM2ZjZDBkZjE4Y2I1N2QzOGU5MGUzYmNmZjc3MmQ+XS9Sb290IDYgMCBSL1NpemUgOD4+CnN0YXJ0eHJlZgoxMTExCiUlRU9GCg==\"\n}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

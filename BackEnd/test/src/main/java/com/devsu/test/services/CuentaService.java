@@ -79,7 +79,7 @@ public class CuentaService {
         cuenta.setSaldoInicial(req.getSaldoInicial());
         cuenta.setEstado(req.getEstado());
 
-        // opcional: reasignar cuenta a otro cliente (si lo permites)
+        // opcional: reasignar cuenta
         if (req.getClienteId() != null) {
             Cliente cliente = clienteRepository.findById(req.getClienteId())
                     .orElseThrow(() -> new BusinessException("Cliente no existe"));

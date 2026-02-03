@@ -69,7 +69,6 @@ public class ReporteService {
         for (Movimiento m : movimientos) {
             if (m.getValor() == null) continue;
 
-            // Si DEPOSITO/RETIRO no están por signo, aquí puedes cambiar la lógica.
             if (m.getValor().compareTo(BigDecimal.ZERO) > 0) {
                 totalCreditos = totalCreditos.add(m.getValor());
             } else {
@@ -81,8 +80,6 @@ public class ReporteService {
         Map<String, BigDecimal> saldoFinalPorCuenta = new HashMap<>();
         Map<String, Movimiento> ultimoMovPorCuenta = new HashMap<>();
 
-        // Nota: esto asume que "movimientos" viene ordenado por fecha asc.
-        // Si tu query no ordena, te recomiendo ordenar aquí o en el repositorio.
         for (Movimiento m : movimientos) {
             if (m.getCuenta() == null) continue;
             String num = m.getCuenta().getNumeroCuenta();
@@ -110,7 +107,7 @@ public class ReporteService {
                 ))
                 .toList();
 
-        // 6) JSON: movimientos (campos pedidos: tipoMovimiento, valor, saldo)
+        // 6) JSON: movimientos
         List<ReporteMovimientoItem> movsDto = movimientos.stream()
                 .map(m -> new ReporteMovimientoItem(
                         m.getId(),
@@ -198,7 +195,7 @@ public class ReporteService {
             document.add(new Paragraph("Total Débitos: " + n(totalDebitos), normal));
             document.add(Chunk.NEWLINE);
 
-            // Tabla Movimientos (lo pedido)
+            // Tabla Movimientos
             document.add(new Paragraph("Movimientos", new Font(Font.HELVETICA, 12, Font.BOLD)));
             PdfPTable tableM = new PdfPTable(5);
             tableM.setWidthPercentage(100);
