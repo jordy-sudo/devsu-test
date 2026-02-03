@@ -1,0 +1,33 @@
+.header{
+  height: 64px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 16px;
+  background: #fff;
+  border-bottom: 1px solid #eaeaea;
+}
+
+.brand{
+  font-size: 22px;
+  font-weight: 700;
+  color: #1f3a8a; 
+  letter-spacing: .2px;
+}
+
+.menu{
+  display: none;
+  width: 42px;
+  height: 42px;
+  border: 1px solid #e5e5e5;
+  background: #fff;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 20px;
+  line-height: 1;
+}
+
+/* mostrar el botón solo en móvil */
+@media (max-width: 768px){
+  .menu{ display: inline-flex; align-items:center; justify-content:center; }
+}

@@ -1,0 +1,28 @@
+<div class="layout">
+    <!-- HEADER FULL WIDTH -->
+    <app-header (menuClick)="toggleSidebar()"></app-header>
+  
+    <!-- BODY: SIDEBAR + CONTENT -->
+    <div class="body">
+      <!-- overlay mobile -->
+      <div
+        class="overlay"
+        [class.overlay--show]="sidebarOpen"
+        (click)="closeSidebar()"
+      ></div>
+  
+      <!-- SIDEBAR -->
+      <aside class="sidebar" [class.sidebar--open]="sidebarOpen">
+        <app-sidebar (navigate)="closeSidebar()"></app-sidebar>
+      </aside>
+  
+      <!-- CONTENT -->
+      <main class="content">
+        <router-outlet></router-outlet>
+      </main>
+    </div>
+
+    <app-global-error></app-global-error>
+    
+  </div>
+  

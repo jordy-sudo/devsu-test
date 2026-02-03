@@ -1,0 +1,39 @@
+.sb{
+  height: 100%;
+  background: #fff;
+}
+
+.sb__title{
+  font-size: 14px;
+  font-weight: 700;
+  padding: 12px 14px;
+  border-bottom: 1px solid #ededed;
+  color: #222;
+}
+
+.sb__nav{
+  display: flex;
+  flex-direction: column;
+}
+
+.sb__nav a{
+  display: block;
+  padding: 12px 14px;
+  text-decoration: none;
+  color: #222;
+  font-size: 14px;
+  border-bottom: 1px solid #f1f1f1;
+  transition: background .15s ease, color .15s ease;
+}
+
+.sb__nav a:hover{
+  background: #fafafa;
+}
+
+.sb__nav a.active{
+  background: #f5f7ff;
+  font-weight: 700;
+  color: #1f3a8a;
+  border-left: 3px solid #1f3a8a;
+  padding-left: 11px; 
+}

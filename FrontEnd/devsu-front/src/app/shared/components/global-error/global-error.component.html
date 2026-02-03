@@ -1,0 +1,19 @@
+@if (state$ | async; as s) {
+    @if (s.visible) {
+      <div class="toast" role="alert" aria-live="assertive">
+        <div class="toast__head">
+          <div class="toast__title">
+            {{ s.title }}
+          </div>
+          <button class="toast__close" type="button" (click)="close()">×</button>
+        </div>
+  
+        <div class="toast__msg">{{ s.message }}</div>
+  
+        @if (s.status) {
+          <div class="toast__meta">Código: {{ s.status }}</div>
+        }
+      </div>
+    }
+  }
+  

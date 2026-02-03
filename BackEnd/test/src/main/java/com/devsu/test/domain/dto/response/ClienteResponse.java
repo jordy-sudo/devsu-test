@@ -4,11 +4,15 @@ public class ClienteResponse {
     private Long clienteId;
     private String nombre;
     private String identificacion;
+    private String direccion;
+    private String telefono;
     private Boolean estado;
 
-    public ClienteResponse(Long clienteId, String nombre, String identificacion, Boolean estado) {
+    public ClienteResponse(Long clienteId, String nombre, String identificacion, String direccion, String telefono, Boolean estado) {
         this.clienteId = clienteId;
         this.nombre = nombre;
+        this.direccion = direccion;
+        this.telefono = telefono;
         this.identificacion = identificacion;
         this.estado = estado;
     }

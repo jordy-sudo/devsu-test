@@ -1,0 +1,71 @@
+<section class="card">
+    <header class="card__header">
+      <h1 class="title">{{ isEdit ? 'Editar Cliente' : 'Nuevo Cliente' }}</h1>
+      <button class="btn" type="button" (click)="volver()">Volver</button>
+    </header>
+  
+    <form class="form" [formGroup]="form" (ngSubmit)="guardar()">
+      <div class="grid">
+        <div class="field">
+          <label>Nombre</label>
+          <input class="input" formControlName="nombre" />
+          <div class="field-error" *ngIf="msg('nombre') as m">{{ m }}</div>
+        </div>
+  
+        <div class="field">
+          <label>Género</label>
+          <select class="input" formControlName="genero">
+            <option value="">Seleccione</option>
+            <option value="M">M</option>
+            <option value="F">F</option>
+          </select>
+          <div class="field-error" *ngIf="msg('genero') as m">{{ m }}</div>
+        </div>
+  
+        <div class="field">
+          <label>Edad</label>
+          <input class="input" type="number" formControlName="edad" />
+          <div class="field-error" *ngIf="msg('edad') as m">{{ m }}</div>
+        </div>
+  
+        <div class="field">
+          <label>Identificación</label>
+          <input class="input" formControlName="identificacion" />
+          <div class="field-error" *ngIf="msg('identificacion') as m">{{ m }}</div>
+        </div>
+  
+        <div class="field">
+          <label>Dirección</label>
+          <input class="input" formControlName="direccion" />
+          <div class="field-error" *ngIf="msg('direccion') as m">{{ m }}</div>
+        </div>
+  
+        <div class="field">
+          <label>Teléfono</label>
+          <input class="input" formControlName="telefono" />
+          <div class="field-error" *ngIf="msg('telefono') as m">{{ m }}</div>
+        </div>
+  
+        <div class="field">
+          <label>Contraseña</label>
+          <input class="input" type="password" formControlName="contrasena" />
+          <div class="field-error" *ngIf="msg('contrasena') as m">{{ m }}</div>
+        </div>
+  
+        <div class="field">
+          <label>Estado</label>
+          <select class="input" formControlName="estado">
+            <option [ngValue]="true">True</option>
+            <option [ngValue]="false">False</option>
+          </select>
+        </div>
+      </div>
+  
+      <div class="footer">
+        <button class="btn btn--primary" type="submit">
+          Guardar
+        </button>
+      </div>
+    </form>
+  </section>
+  

@@ -1,0 +1,52 @@
+<section class="card">
+    <header class="card__header">
+      <h1 class="title">Clientes</h1>
+  
+      <div class="actions">
+        <input
+          class="input"
+          placeholder="Buscar"
+          [(ngModel)]="search"
+          (ngModelChange)="facade.setSearch($event)"
+        />
+        <button class="btn btn--primary" (click)="nuevo()">Nuevo</button>
+      </div>
+    </header>
+  
+    <div class="alert alert--error" *ngIf="(vm$ | async)?.error as err">
+      {{ err }}
+      <button class="alert__close" (click)="facade.clearError()">×</button>
+    </div>
+  
+    <div class="loading" *ngIf="(vm$ | async)?.loading">Cargando...</div>
+  
+    <div class="table-wrap" *ngIf="(vm$ | async) as vm">
+      <table class="table" *ngIf="!vm.loading">
+        <thead>
+          <tr>
+            <th>Nombres</th>
+            <th>Identificacion</th>
+            <th>Estado</th>
+            <th style="width: 160px">Acciones</th>
+          </tr>
+        </thead>
+  
+        <tbody>
+          <tr *ngFor="let c of vm.data">
+            <td>{{ c.nombre }}</td>
+            <td>{{ c.identificacion }}</td>
+            <td>{{ c.estado ? 'Activo' : 'Inactivo' }}</td>
+            <td class="row-actions">
+              <button class="btn btn--ghost" (click)="editar(c.clienteId)">Editar</button>
+              <button class="btn btn--danger" (click)="eliminar(c.clienteId)">Eliminar</button>
+            </td>
+          </tr>
+  
+          <tr *ngIf="!vm.loading && vm.data.length === 0">
+            <td colspan="6" class="empty">Sin resultados</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+  
